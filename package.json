@@ -1,0 +1,26 @@
+{
+  "name": "sqlite.gun",
+  "version": "1.0.0",
+  "description": "ODBC/Sqlite persistence layer for gun",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "keywords": [
+    "gun",
+    "gundb",
+    "sqlite",
+    "sqlite3",
+    "driver",
+    "vfs"
+  ],
+  "author": "d3x0r",
+  "license": "MIT",
+  "dependencies": {
+    "sack.vfs": "^0.1",
+    "gun": "^0.7.0"
+  },
+  "devDependencies": {
+    "mocha": "^3.0.0"
+  }
+}
