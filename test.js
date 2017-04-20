@@ -1,4 +1,4 @@
-try{require('fs').unlinkSync('gun.db*');
+try{require('fs').unlinkSync('gun.db');
 }catch(e){}
 
 require('./index');

@@ -1,5 +1,5 @@
 {
-  "name": "sqlite.gun",
+  "name": "gun.db",
   "version": "1.0.0",
   "description": "ODBC/Sqlite persistence layer for gun",
   "main": "index.js",
