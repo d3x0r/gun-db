@@ -1,3 +1,8 @@
+
+process.on( "warning", (warning)=>{console.trace( "WARNING:", warning ); } );
+process.on( "error", (warning)=>{console.trace( "ERROR PROCESS:", warning ); } );
+//process.on( "exit", (warning)=>{console.trace( warning ); } );
+
 var Gun = require('gun/gun');
 const vfs = require("sack.vfs");
 
