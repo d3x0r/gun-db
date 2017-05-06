@@ -25,3 +25,8 @@ Check the gun docs on how to read/write data, it will then handle sync automatic
 Enjoy!
 
 Or: Complain about bugs. :)
+
+
+# notes
+   if the filename is '*.db' it defaults to sqlite if it's not it tries it as a DSN (data source name) and then if that doesn't work falls back to use sqlite filename.
+   odbc can be provided by providing unixodbc on linux, but requires modifying the build to enable.
