@@ -28,5 +28,11 @@ Or: Complain about bugs. :)
 
 
 # notes
-   if the filename is '*.db' it defaults to sqlite if it's not it tries it as a DSN (data source name) and then if that doesn't work falls back to use sqlite filename.
-   odbc can be provided by providing unixodbc on linux, but requires modifying the build to enable.
+   If the filename is '*.db' it defaults to sqlite if it's not it tries it as a DSN (data source name) and then if that doesn't work falls back to use sqlite filename.
+   ODBC can be provided by providing unixodbc on linux, but requires modifying the build to enable; it  is by default only enabled for windows.
+
+   It also ends up writing a sql.config file somewhere ... there's options you can set there to enable sql logging (optionally with data returned) which goes to stderr   
+     under windows this goes to (/programdata/freedom collective/node/...) probably.  If your node.exe is not what your running it will be in a folder that is whatever the program name is minus the last (.*)
+     under not windows it probably just goes to ~
+     
+    
