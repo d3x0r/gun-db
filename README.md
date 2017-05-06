@@ -4,7 +4,7 @@ ODBC/Sqlite native persistence layer for [gun](https://github.com/amark/gun)! GU
 
 Get it by
 
-`npm install gun.sqlite.sack`
+`npm install gun.db`
 
 Use by
 
