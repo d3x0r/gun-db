@@ -57,3 +57,9 @@ var gun = Gun({
 /* ... your appcode ... */
 
 ```
+
+
+# Changelog
+- 1.0.2 update to Gun 0.8.3
+- 1.0.1 First usable version
+
