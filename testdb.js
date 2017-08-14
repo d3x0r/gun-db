@@ -4,6 +4,10 @@ var Gun = require( "gun/gun" );
 var gunNot = require('gun/lib/not')
 var gunDb = require( "." );
 
+//var vfs = require( "sack.vfs" );
+//var vol = vfs.Volume( "Mount", "data.vfs" );
+//var gun = new Gun( { db:{ file:'$sack@Mount$gun.db' } } );
+
 var gun = new Gun( { db:{ file:'gun.db' } } );
 
 var root = gun.get( "db" );
@@ -34,24 +38,35 @@ function dumpDatabase() {
 	
 }
 
+var done = false;
 function showItems() {
 	console.log( "Got", count, "items" );
-	dumpDatabase();
+	//dumpDatabase();
+	if( !done )
+		setTimeout( showItems, 1000 );
 }
+timeout = setTimeout( showItems, 1000 );
 var timeout;
+var tick = Date.now();
+var _n = 0;
 root.map( (field,val)=>{ 
 	if( !first ) {
 		console.log( "first map in ", Date.now() - start );
 		first = true;
 	}
 	count++;
-	if( timeout )
-		clearTimeout( timeout );
-	timeout = setTimeout( showItems, 100 );
+	if( count % 1000 === 0 ) console.log( "count:", count );
 	//console.log( "Got:", val, field ) 
 	if( val == "hello" ) {
-		for( var n = 0; n < 10; n++ )
-			root.set( { field: "randomkey" } );
+		for( var n = 0; n < 30; n++ ) {
+			if( (n % 1000) === 0 ) {
+				console.log( "new items:", n , Date.now() - tick, (n-_n)/(Date.now() - tick) );
+				tick = Date.now();
+				_n = n;
+			}
+			root.set( { field: "randomkey" }  );
+		}
+		done = true;
 	}
 } )
 
