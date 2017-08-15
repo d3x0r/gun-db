@@ -60,7 +60,7 @@ var gun = Gun({
 
 
 # Changelog
-- 1.0.5 add preferGlobal to package.json
+- 1.0.5 (pending)
 - 1.0.4 fix excessively slow load; misported from sqlite.gun.
 - 1.0.3 fix database performance options.
 - 1.0.2 update to Gun 0.8.3
