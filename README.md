@@ -4,13 +4,13 @@ ODBC/Sqlite native persistence layer for [gun](https://github.com/amark/gun)! GU
 
 Get it by
 
-`npm install gun.db`
+`npm install gun-db`
 
 Use by
 
 ```javascript
 var Gun = require('gun');
-require('gun.db');
+require('gun-db');
 
 var gun = Gun({
   file: false // turn off pesky file.js data.json default
@@ -45,7 +45,7 @@ var vfs = require( "sack.vfs" );
 var vol = vfs.Volume( "MountName", "vfsFile.dat" );
 
 var Gun = require('gun');
-require('gun.db');
+require('gun-db');
 
 var gun = Gun({
   file: false // turn off pesky file.js data.json default
