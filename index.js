@@ -109,7 +109,7 @@ Gun.on('opt', function(ctx){
 		var field = lex[val_];
 		_debug && console.log( "doing get...for", soul, typeof field, field );
 		if(node_ === field){
-			_deubg && console.log( "underscore field...", lex );
+			_debug && console.log( "underscore field...", lex );
 			var record = client.do( `select * from record where soul='${client.escape(soul)}'` );
 			if(!record || !record.length){
 				_debug && console.log( "So, result with an in?" );
@@ -125,11 +125,11 @@ Gun.on('opt', function(ctx){
 		if(field){
 			_debug && console.log( " field...", field );
 			var record = client.do( `select * from record where soul='${client.escape(soul)}' and field='${client.escape(field)}'` );
-			_deubg && console.log( "Specific field?" );
+			_debug && console.log( "Specific field?" );
 			if( record ) return gun.on('in', {[ACK_]: at[SEQ_], put: Gun.graph.node(nodeify(record[0]))});
 			return 
 		}
-		_deubg && console.log( "select all fields...", soul );
+		_debug && console.log( "select all fields...", soul );
 		var record = client.do( `select * from record where soul='${client.escape(soul)}'` );
 		if( !record || !record.length){
 			_debug && console.log( "nothing... So, result with an in?" );
