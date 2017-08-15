@@ -1,3 +1,6 @@
+
+[![Join the chat at https://gitter.im/sack-vfs/Lobby](https://badges.gitter.im/sack-vfs/gun-db.svg)](https://gitter.im/sack-vfs/gun-db?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 # gun.db
 ODBC/Sqlite native persistence layer for [gun](https://github.com/amark/gun)! GUN is an Open Source Firebase with swappable storage engines (level, SQLite, etc.) that handles data synchronization across machines / devices.
 
