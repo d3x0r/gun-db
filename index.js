@@ -118,7 +118,7 @@ Gun.on('opt', function(ctx){
 			{
 				record = (record||[])[0];
 				var empty = Gun.state.ify(u, u, u, u, soul);
-				console.log( "give back empyt?", empty );
+				_debug && console.log( "give back empyt?", empty, record );
 				return gun.on('in', {[ACK_]: at[SEQ_], put: Gun.graph.node(empty)});
 			}
 		}
