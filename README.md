@@ -63,6 +63,9 @@ var gun = Gun({
 
 
 # Changelog
+- 1.0.55 More cleanup; if database open fails, don't register handlers.
+- 1.0.54 fixed typo
+- 1.0.53 a little cleanup; move varibes to closure (bad debug typo)
 - 1.0.52 remove noisy logging when record already up to date; post reply acking the transation.
 - 1.0.51 Update docs; add gitter badge
 - 1.0.4 fix excessively slow load; misported from sqlite.gun.
