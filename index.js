@@ -77,7 +77,8 @@ Gun.on('opt', function(ctx){
 				// Check to see if what we have on disk is more recent.
 				//console.log( "result?", record )
 				if(record && record.length && state <= record[0].state){ 
-					console.log( "already newer in database.." ); 
+					_debug && console.log( "already newer in database.." ); 
+					gun.on('in', {[ACK_]: at[rel_], ok: 1});
 					return 
 				}
 				if(value && (tmp = value[rel_])){ // TODO: Don't hardcode.
