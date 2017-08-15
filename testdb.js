@@ -8,7 +8,7 @@ var gunDb = require( "." );
 //var vol = vfs.Volume( "Mount", "data.vfs"/*, "key1", "key2"*/ );
 //var gun = new Gun( { db:{ file:'$sack@Mount$gun.db' } } );
 
-var gun = new Gun( { db:{ file:'gun.db' } } );
+var gun = new Gun( /*{ db:{ file:'gun.db' } }*/ );
 
 var root = gun.get( "db" );
 
