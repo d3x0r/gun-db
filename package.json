@@ -1,6 +1,6 @@
 {
   "name": "gun-db",
-  "version": "1.0.5",
+  "version": "1.0.51",
   "description": "ODBC/Sqlite persistence layer for gun",
   "main": "index.js",
   "keywords": [
