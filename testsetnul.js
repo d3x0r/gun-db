@@ -38,10 +38,10 @@ bob.not( (val)=>{
 	console.log( "init bob data" , val);
 	bob.put( { name:'bob', dob: "yes", color: "purple" } );
 } );
-	if( add ) {
-		console.log( "adding bob friend" );
-		alice.get( 'friends' ).set( bob );
-	}
+if( add ) {
+	console.log( "adding bob friend" );
+	alice.get( 'friends' ).set( bob );
+}
 
 var charlie = root.get( "charlie" )
 charlie.not( (val)=>{
@@ -49,34 +49,25 @@ charlie.not( (val)=>{
 	charlie.put( {name:"charlie", dob : "not yet", extra: "banana" } );
 } );
 
-	if( add ) {
-		console.log( "adding charlie friend" );
-		alice.get( 'friends' ).set( charlie );
-	}
+if( add ) {
+	console.log( "adding charlie friend" );
+	alice.get( 'friends' ).set( charlie );
+}
 
-
-
-alice.get( 'friends' ).map().val( (val, field)=>{ 
-	if( !val ) { console.log( "(val)Got empty value:", val ); return }
-	if( del )
-		if( val.name == 'bob' ) {
-			console.log( "Removing bob from alice friend" );
-			//val[rel_][node_].put( null );
-			alice.get( 'fiends' ).get( field ).put(null );
-		}
-	console.log( "(val)alice has a friend", val.name );
+var deleting = false;
+var deleted = false;
+alice.get( 'friends' ).map( ).val( function(val, field, ctx) { 
+		if( deleting ) { console.log( "skip new value during delete" ); return }
+		if( !val ) { console.log( "(val)Got empty value:", val ); return }
+		if( del && !deleted )
+			if( val.name == 'bob' ) {
+				console.log( "Removing bob from alice friend", field, val, ctx );
+				deleting = true;
+				deleted = true;
+				this.back(1).put( { [field]: null } );
+				deleting = false;
+				//alice.get( 'fiends' ).get( field ).put(null );
+			}
+		console.log( "(val)alice has a friend", val.name );
 } );
 
-/*
-alice.get( 'friends' ).map().on( (val, field)=>{ 
-	if( !val ) { console.log( "(on)Got empty value:", val ); return }
-	if( false && del )
-		if( val.name == 'bob' ) {
-			console.log( "Removing bob from alice friend" );
-			//val[rel_][node_].put( null );
-			alice.get( 'fiends' ).get( field ).put(null );
-		}
-	console.log( "(on)alice has a friend", val.name );
-} );
-
-*/
