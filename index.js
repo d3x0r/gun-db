@@ -110,28 +110,13 @@ Gun.on('opt', function(ctx){
 		_debug && console.log( new Date(), "doing get...for", soul, field );
 		if(node_ === field){
 			_debug && console.log( new Date(), "underscore field...", lex );
-			var record = client.do( `select * from record where soul='${client.escape(soul)}'` );
+			var record = client.do( `select 1 from record where soul='${client.escape(soul)}' limit 1` );
 			if(!record || !record.length){
 				_debug && console.log( "So, result with an in?" );
 				return gun.on('in', {[ACK_]: at[SEQ_]});
 			}
-			if( record.length > 1 )
-				console.log( "more than one of these field records" );
-			{
-				record = record[0];
-				//var empty = Gun.state.ify(u, u, u, u, soul);
-				//_debug && console.log( "give back empyt?", Gun.graph.node(empty), record );
-				var state = Gun.state.is(node, field);
-				if(record && record.length && state <= record.state){ 
-				}
-				_debug && console.log( new Date(), "Get state and node state is:", state, record.state );
-				if( record.relation )
-					msg = { [record.soul]: { [node_]:{ [rel_]:record.soul, [state_]:{[record.field]:record.state }}, [record.field]:{[rel_]:record.relation} } };
-				else
-					msg = { [record.soul]: { [node_]:{ [rel_]:record.soul, [state_]:{[record.field]:record.state }}, [record.field]:JSON.parse(record.value) } };
-				//_debug && console.log( "Are these the same anyway?\n",JSON.stringify( msg), "\n", JSON.stringify(Gun.graph.node(empty)));
-				return gun.on('in', {[ACK_]: at[SEQ_], put: msg /*Gun.graph.node(empty)*/});
-			}
+			_debug && console.log( "give back empty?", Gun.graph.node(empty), record );
+			return gun.on('in', {[ACK_]: at[SEQ_], put: { [record.soul]: { [node_]:{ [rel_]:record.soul, [state_]:{}} }}});
 		}
 		if(field){
 			_debug && console.log( new Date(), " field...", field );
