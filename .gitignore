@@ -1,0 +1,7 @@
+node_modules
+*~
+sql.config
+gun.db*
+data.json*
+zz*
+xx*

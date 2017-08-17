@@ -1,0 +1,10 @@
+.gitignore
+.npmignore
+*~
+gun.db
+gun.db-journal
+data.json*
+zz*
+xx*
+sql.config
+
