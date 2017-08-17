@@ -9,7 +9,7 @@ const vfs = require("sack.vfs");
 var _debug_counter = 0;
 var __debug_counter = 0;
 var _debug_tick = Date.now();
-const _debug = false;
+const _debug = true;
 
 const rel_ = Gun.val.rel._;  // '#'
 const val_ = Gun._.field;  // '.'
@@ -77,16 +77,19 @@ Gun.on('opt', function(ctx){
 				// Check to see if what we have on disk is more recent.
 				//console.log( "result?", record )
 				if(record && record.length && state <= record[0].state){ 
-					_debug && console.log( "already newer in database.." ); 
+					_debug && console.log( new Date(), "already newer in database.." ); 
 					gun.on('in', {[ACK_]: at[rel_], ok: 1});
 					return 
 				}
 				if(value && (tmp = value[rel_])){ // TODO: Don't hardcode.
 					dataRelation = "'" + client.escape(tmp) + "'";
 					dataValue = "NULL"
-				} else {
+				} else if( value ) {
 					dataRelation = "NULL";
 					dataValue = "'" + client.escape(JSON.stringify(value)) + "'";
+				} else {
+					dataRelation = "NULL";
+					dataValue = "NULL"
 				}
 				try {
 					_debug && console.log( new Date(), "Do replace field soul:", soul, " field:", field, "val:", dataValue );
@@ -107,22 +110,35 @@ Gun.on('opt', function(ctx){
 		if(!lex){ return }
 		var soul = lex['#'];
 		var field = lex[val_];
-		_debug && console.log( new Date(), "doing get...for", soul, field );
+		_debug && console.log( new Date(), "doing get...for soul:", soul, "field:",field );
 		if(node_ === field){
-			_debug && console.log( new Date(), "underscore field...", lex );
 			var record = client.do( `select 1 from record where soul='${client.escape(soul)}' limit 1` );
+			console.log( "select result:", record );
 			if(!record || !record.length){
 				_debug && console.log( "So, result with an in?" );
 				return gun.on('in', {[ACK_]: at[SEQ_]});
 			}
-			_debug && console.log( "give back empty?", Gun.graph.node(empty), record );
-			return gun.on('in', {[ACK_]: at[SEQ_], put: { [record.soul]: { [node_]:{ [rel_]:record.soul, [state_]:{}} }}});
+			_debug && console.log( "give back empty"  );
+			return gun.on('in', {[ACK_]: at[SEQ_], put: { [soul]: { [node_]:{ [rel_]:soul, [state_]:{}} }}});
 		}
 		if(field){
 			_debug && console.log( new Date(), " field...", field );
 			var record = client.do( `select * from record where soul='${client.escape(soul)}' and field='${client.escape(field)}'` );
-			_debug && console.log( new Date(), "Specific field?" );
-			if( record ) return gun.on('in', {[ACK_]: at[SEQ_], put: Gun.graph.node(nodeify(record[0]))});
+			if( record && record.length ) {
+				_debug && console.log( new Date(), "Specific field?", record );
+				console.log( record );
+				let rec= record[0]
+					var msg;
+					if( rec.relation )
+						msg = { [rec.soul]: { [node_]:{ [rel_]:rec.soul, [state_]:{[rec.field]:rec.state }}, [rec.field]:{[rel_]:rec.relation} } };
+					else if( rec.value )
+						msg = { [rec.soul]: { [node_]:{ [rel_]:rec.soul, [state_]:{[rec.field]:rec.state }}, [rec.field]:JSON.parse(rec.value) } };
+					skip_put = at[SEQ_];
+					console.log( "Missed skip-put", msg );
+					gun.on('in', {[ACK_]: at[SEQ_], put: msg});
+					skip_put = null;
+				//} )
+			}
 			return 
 		}
 		_debug && console.log( new Date(), "select all fields...", soul );
@@ -132,37 +148,17 @@ Gun.on('opt', function(ctx){
 			gun.on('in', {[ACK_]: at[SEQ_]});	
 		}
 		else {
-			if( true ) {
-				record.forEach(function(record){ 
-					var msg;
-					if( record.relation )
-						msg = { [record.soul]: { [node_]:{ [rel_]:record.soul, [state_]:{[record.field]:record.state }}, [record.field]:{[rel_]:record.relation} } };
-					else
-						msg = { [record.soul]: { [node_]:{ [rel_]:record.soul, [state_]:{[record.field]:record.state }}, [record.field]:JSON.parse(record.value) } };
-					_debug && console.log( new Date(), "  From Nodify", JSON.stringify(msg) );
-					skip_put = at[SEQ_];
-					gun.on('in', {[ACK_]: at[SEQ_], put: msg } );
-					skip_put = null;
-			        
-				});
-			} else {        
-				var node;
-				function nodeify(record, node){
-					if(!record){ return }
-					var value;
-					try{value = record.relation? Gun.val.rel.ify(record.relation) : JSON.parse(record.value);
-					}catch(e){}
-					return Gun.state.ify(node, record.field, parseFloat(record.state), value, record.soul);
-				}
-				record.forEach(function(record){ 
-					node=nodeify(record, node);			        
-				});
+			record.forEach(function(record){ 
+				var msg;
+				if( record.relation )
+					msg = { [record.soul]: { [node_]:{ [rel_]:record.soul, [state_]:{[record.field]:record.state }}, [record.field]:{[rel_]:record.relation} } };
+				else 
+					msg = { [record.soul]: { [node_]:{ [rel_]:record.soul, [state_]:{[record.field]:record.state }}, [record.field]:JSON.parse(record.value) } };
+				_debug && console.log( new Date(), "  From Nodify", JSON.stringify(msg) );
 				skip_put = at[SEQ_];
-				_debug && console.log( new Date(), "  to in", node );
-				gun.on('in', {[ACK_]: at[SEQ_], put: Gun.graph.node(node) } );
-				_debug && console.log( new Date(), "  from in" );
+				result = gun.on('in', {[ACK_]: at[SEQ_], put: msg } );
 				skip_put = null;
-			}
+			});
 		}
 	});
 
