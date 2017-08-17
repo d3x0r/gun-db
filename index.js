@@ -85,7 +85,7 @@ console.log( "setup database..." );
 					return 
 				}
 				if(value && (tmp = value[rel_])){ // TODO: Don't hardcode.
-					dataRelation = "'" + client.escape(tmp) + "'";
+					dataRelation = "'" + client.escape(JSON.stringify(tmp)) + "'";
 					dataValue = "NULL"
 				} else if( value ) {
 					dataRelation = "NULL";
@@ -132,7 +132,7 @@ console.log( "setup database..." );
 				let rec= record[0]
 				var msg;
 				if( rec.relation )
-					msg = { [rec.soul]: { [node_]:{ [rel_]:rec.soul, [state_]:{[rec.field]:rec.state }}, [rec.field]:{[rel_]:rec.relation} } };
+					msg = { [rec.soul]: { [node_]:{ [rel_]:rec.soul, [state_]:{[rec.field]:rec.state }}, [rec.field]:{[rel_]:JSON.parse(rec.relation)} } };
 				else if( rec.value )
 					msg = { [rec.soul]: { [node_]:{ [rel_]:rec.soul, [state_]:{[rec.field]:rec.state }}, [rec.field]:JSON.parse(rec.value) } };
 				else
@@ -154,7 +154,7 @@ console.log( "setup database..." );
 			record.forEach(function(record){ 
 				var msg;
 				if( record.relation )
-					msg = { [record.soul]: { [node_]:{ [rel_]:record.soul, [state_]:{[record.field]:record.state }}, [record.field]:{[rel_]:record.relation} } };
+					msg = { [record.soul]: { [node_]:{ [rel_]:record.soul, [state_]:{[record.field]:record.state }}, [record.field]:{[rel_]:JSON.parse(record.relation)} } };
 				else if( record.value )
 					msg = { [record.soul]: { [node_]:{ [rel_]:record.soul, [state_]:{[record.field]:record.state }}, [record.field]:JSON.parse(record.value) } };
 				else
