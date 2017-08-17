@@ -63,6 +63,7 @@ var gun = Gun({
 
 
 # Changelog
+- 1.0.56 fix writing null value and relation; fixed relation restore; remove unused code; optimize existance check
 - 1.0.55 More cleanup; if database open fails, don't register handlers.
 - 1.0.54 fixed typo
 - 1.0.53 a little cleanup; move varibes to closure (bad debug typo)

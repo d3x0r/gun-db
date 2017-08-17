@@ -11,10 +11,10 @@ else {
 	//process.exit(0);
 }
 
-//var Gun = require( "gun/gun" );
-//var gunDb = require( "." );
+var Gun = require( "gun/gun" );
+var gunDb = require( "." );
 
-var Gun = require( "gun" );
+//var Gun = require( "gun" );
 
 var gunNot = require('gun/lib/not')
 

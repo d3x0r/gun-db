@@ -132,6 +132,8 @@ Gun.on('opt', function(ctx){
 					msg = { [rec.soul]: { [node_]:{ [rel_]:rec.soul, [state_]:{[rec.field]:rec.state }}, [rec.field]:{[rel_]:rec.relation} } };
 				else if( rec.value )
 					msg = { [rec.soul]: { [node_]:{ [rel_]:rec.soul, [state_]:{[rec.field]:rec.state }}, [rec.field]:JSON.parse(rec.value) } };
+				else
+					msg = { [rec.soul]: { [node_]:{ [rel_]:rec.soul, [state_]:{[rec.field]:rec.state }}, [rec.field]:null } };
 				skip_put = at[SEQ_];
 				_debug && console.log( new Date(), "Missed skip-put", msg );
 				gun.on('in', {[ACK_]: at[SEQ_], put: msg});
@@ -150,8 +152,10 @@ Gun.on('opt', function(ctx){
 				var msg;
 				if( record.relation )
 					msg = { [record.soul]: { [node_]:{ [rel_]:record.soul, [state_]:{[record.field]:record.state }}, [record.field]:{[rel_]:record.relation} } };
-				else 
+				else if( rec.value )
 					msg = { [record.soul]: { [node_]:{ [rel_]:record.soul, [state_]:{[record.field]:record.state }}, [record.field]:JSON.parse(record.value) } };
+				else
+					msg = { [record.soul]: { [node_]:{ [rel_]:record.soul, [state_]:{[record.field]:record.state }}, [record.field]:null } };
 				_debug && console.log( new Date(), "  From Nodify", JSON.stringify(msg) );
 				skip_put = at[SEQ_];
 				result = gun.on('in', {[ACK_]: at[SEQ_], put: msg } );
