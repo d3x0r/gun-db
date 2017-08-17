@@ -10,8 +10,12 @@ var gunDb = require( "." );
 
 var gun = new Gun( /*{ db:{ file:'gun.db' } }*/ );
 
+console.log( new Date(), "Initialized gun instance" );
 var root = gun.get( "db" );
 
+console.log( new Date(), "got root db" );
+
+var notStart = Date.now();
 root.not( ()=>{
 	console.log( "not happened." );
 	root.put( { hello:"world" } );
@@ -20,23 +24,11 @@ root.not( ()=>{
 	root.set( { field: "randomkey" } );
 	root.set( { field: "randomkey" } );
 } );
+console.log( "waited in not?", Date.now() - notStart );
 
 var count = 0;
 var start = Date.now();
 var first = false;
-
-function dumpDatabase() {
-	var vfs = require( "sack.vfs" );
-	var db = vfs.Sqlite( "gun.db" );
-	var tables = db.do( "select tbl_name from sqlite_master where type='table'" );
-	console.log( "Tables:", tables );
-	var records = db.do( "select * from record" );
-	console.log( "records:" );
-	records.forEach( rec=>{ 
-		console.log( `   ${rec.soul} ${rec.field} ${rec.value} ${rec.relation} ${rec.state}` );
-	} );
-	
-}
 
 var done = false;
 function showItems() {
@@ -45,9 +37,10 @@ function showItems() {
 	if( !done )
 		setTimeout( showItems, 1000 );
 }
-timeout = setTimeout( showItems, 1000 );
+timeout = setTimeout( showItems, 100 );
 var timeout;
 var tick = Date.now();
+console.log( new Date(), "marked tick." );
 var _n = 0;
 var gotHello = false;
 root.map( (field,val)=>{ 
@@ -61,7 +54,7 @@ root.map( (field,val)=>{
 	if( val == "hello" && !gotHello ) {
 		gotHello = true;
 		console.log( new Date(), "Got:", val, field ) 
-		for( var n = 0; n < 30000; n++ ) {
+		for( var n = 0; n < 3000; n++ ) {
 			if( (n % 1000) === 0 ) {
 				console.log( new Date(), "new items:", n , Date.now() - tick, (n-_n)/(Date.now() - tick) );
 				tick = Date.now();
