@@ -9,7 +9,7 @@ const vfs = require("sack.vfs");
 var _debug_counter = 0;
 var __debug_counter = 0;
 var _debug_tick = Date.now();
-const _debug = true;
+const _debug = false;
 
 const rel_ = Gun.val.rel._;  // '#'
 const val_ = Gun._.field;  // '.'
@@ -113,12 +113,12 @@ Gun.on('opt', function(ctx){
 		_debug && console.log( new Date(), "doing get...for soul:", soul, "field:",field );
 		if(node_ === field){
 			var record = client.do( `select 1 from record where soul='${client.escape(soul)}' limit 1` );
-			console.log( "select result:", record );
+			_debug && console.log( new Date(), "select result:", record );
 			if(!record || !record.length){
 				_debug && console.log( "So, result with an in?" );
 				return gun.on('in', {[ACK_]: at[SEQ_]});
 			}
-			_debug && console.log( "give back empty"  );
+			_debug && console.log( new Date(), "give back empty"  );
 			return gun.on('in', {[ACK_]: at[SEQ_], put: { [soul]: { [node_]:{ [rel_]:soul, [state_]:{}} }}});
 		}
 		if(field){
@@ -126,18 +126,16 @@ Gun.on('opt', function(ctx){
 			var record = client.do( `select * from record where soul='${client.escape(soul)}' and field='${client.escape(field)}'` );
 			if( record && record.length ) {
 				_debug && console.log( new Date(), "Specific field?", record );
-				console.log( record );
 				let rec= record[0]
-					var msg;
-					if( rec.relation )
-						msg = { [rec.soul]: { [node_]:{ [rel_]:rec.soul, [state_]:{[rec.field]:rec.state }}, [rec.field]:{[rel_]:rec.relation} } };
-					else if( rec.value )
-						msg = { [rec.soul]: { [node_]:{ [rel_]:rec.soul, [state_]:{[rec.field]:rec.state }}, [rec.field]:JSON.parse(rec.value) } };
-					skip_put = at[SEQ_];
-					console.log( "Missed skip-put", msg );
-					gun.on('in', {[ACK_]: at[SEQ_], put: msg});
-					skip_put = null;
-				//} )
+				var msg;
+				if( rec.relation )
+					msg = { [rec.soul]: { [node_]:{ [rel_]:rec.soul, [state_]:{[rec.field]:rec.state }}, [rec.field]:{[rel_]:rec.relation} } };
+				else if( rec.value )
+					msg = { [rec.soul]: { [node_]:{ [rel_]:rec.soul, [state_]:{[rec.field]:rec.state }}, [rec.field]:JSON.parse(rec.value) } };
+				skip_put = at[SEQ_];
+				_debug && console.log( new Date(), "Missed skip-put", msg );
+				gun.on('in', {[ACK_]: at[SEQ_], put: msg});
+				skip_put = null;
 			}
 			return 
 		}
