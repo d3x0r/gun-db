@@ -3,7 +3,6 @@ process.on( "warning", (warning)=>{console.trace( "WARNING:", warning ); } );
 process.on( "error", (warning)=>{console.trace( "ERROR PROCESS:", warning ); } );
 process.on( "exit", (warning)=>{console.trace( "EXIT:", warning ); } );
 
-console.log( "Init..." );
 const Gun = require('gun/gun');
 const vfs = require("sack.vfs");
 
@@ -27,12 +26,10 @@ Gun.on('opt', function(ctx){
 	opt.file = opt.file || (__dirname + '/gun.db');
 	var client = vfs.Sqlite(opt.file);
 	var gun = ctx.gun;
-console.log( "gun instance create..." );
 	if( !client ) {
 		console.log( "Failed to open database:", opt.file );
 		return;
 	}
-console.log( "setup database..." );
 	//client.transaction();
 	client.makeTable( `create table record (
 			soul char,

@@ -63,6 +63,7 @@ var gun = Gun({
 
 
 # Changelog
+- 1.0.563 remove excess logging
 - 1.0.562 store json string in data  otherwise simple number types come back as numbers and not strings (invalid graph! error)
 - 1.0.561 fix last minute typo
 - 1.0.56 fix writing null value and relation; fixed relation restore; remove unused code; optimize existance check
