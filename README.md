@@ -90,7 +90,7 @@ var gun = Gun({
 
 ### Benchmark Results
 
-
+```
 (sqlite, native filesystem, windows)
 __ Small Nodes: 10 Properties Each __
 Write 10000 nodes: : 19841ms; 19.841s; 1.984 ms/node; errors: 0.
@@ -144,3 +144,4 @@ Read 10 nodes: : 9496ms; 9.496s; 863.273 ms/node; errors: 0.
 Update 10 nodes: : 37709ms; 37.709s; 3428.091 ms/node; errors: 0.
 Update single field on 10 nodes: : 3587ms; 3.587s; 326.091 ms/node; errors: 0.
 
+```
