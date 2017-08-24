@@ -23,7 +23,7 @@ Gun.on('opt', function(ctx){
 	this.to.next(ctx);
 	if(ctx.once){ return }
 	var opt = ctx.opt.db || (ctx.opt.db = {});
-	opt.file = opt.file || (__dirname + '/gun.db');
+	opt.file = opt.file || ('gun.db');
 	var client = vfs.Sqlite(opt.file);
 	var gun = ctx.gun;
 	if( !client ) {
