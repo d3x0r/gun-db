@@ -23,6 +23,7 @@ Gun.on('opt', function(ctx){
 	this.to.next(ctx);
 	if(ctx.once){ return }
 	var opt = ctx.opt.db || (ctx.opt.db = {});
+	//opt.file = opt.file || ('file:gun.db?nolock=1');
 	opt.file = opt.file || ('gun.db');
 	var client = vfs.Sqlite(opt.file);
 	var gun = ctx.gun;
@@ -45,7 +46,9 @@ Gun.on('opt', function(ctx){
 	client.do( "PRAGMA journal_mode=PERSIST" );
 	//client.do( "PRAGMA journal_mode=WAL" );
 	client.do( "PRAGMA synchronous = 0"); // necessary for perf!
-	client.do( "PRAGMA locking_mode = EXCLUSIVE" );
+	if( opt.exclusive )
+		client.do( "PRAGMA locking_mode = EXCLUSIVE" );
+
 	//client.do( "create index if not exists soul_field_index on record(soul,field)");
 	//client.commit();
 	//client.autoTransact( true );

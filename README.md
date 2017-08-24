@@ -19,9 +19,13 @@ var gun = Gun({
   file: false // turn off pesky file.js data.json default
   , db: {
     file: "gun.db"
+    exclusive : false // default
   }
 });
 ```
+
+If you want to have maximum speed, you can set exclusive, which will gain about 30-40% speed; but you're only allowed one instance of Gun against this database.
+You can open multiple instances if they don't have the same database name.
 
 Check the gun docs on how to read/write data, it will then handle sync automatically for you (even to the browser!). Tip: It is a graph database, so you can do key/value, document, relational, or graph based data - here is a [crash course](https://github.com/amark/gun/wiki/graphs) on how to use it.
 
@@ -63,6 +67,8 @@ var gun = Gun({
 
 
 # Changelog
+- 1.0.565 disable exclusive by default; add option to enable it
+- 1.0.564 test sqlite database without exclusive, but with URI filename and nolock option.
 - 1.0.563 remove excess logging
 - 1.0.562 store json string in data  otherwise simple number types come back as numbers and not strings (invalid graph! error)
 - 1.0.561 fix last minute typo
