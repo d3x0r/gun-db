@@ -1,7 +1,7 @@
 
-process.on( "warning", (warning)=>{console.trace( "WARNING:", warning ); } );
-process.on( "error", (warning)=>{console.trace( "ERROR PROCESS:", warning ); } );
-process.on( "exit", (warning)=>{console.trace( "EXIT:", warning ); } );
+//process.on( "warning", (warning)=>{console.trace( "WARNING:", warning ); } );
+//process.on( "error", (warning)=>{console.trace( "ERROR PROCESS:", warning ); } );
+//process.on( "exit", (warning)=>{console.trace( "EXIT:", warning ); } );
 
 const Gun = require('gun/gun');
 const vfs = require("sack.vfs");
@@ -138,7 +138,7 @@ Gun.on('opt', function(ctx){
 				else
 					msg = { [rec.soul]: { [node_]:{ [rel_]:rec.soul, [state_]:{[rec.field]:rec.state }}, [rec.field]:null } };
 				skip_put = at[SEQ_];
-				_debug && console.log( new Date(), "Missed skip-put", msg );
+				console.log( new Date(), msg );
 				gun.on('in', {[ACK_]: at[SEQ_], put: msg});
 				skip_put = null;
 			}
@@ -151,21 +151,46 @@ Gun.on('opt', function(ctx){
 			gun.on('in', {[ACK_]: at[SEQ_]});	
 		}
 		else {
-			record.forEach(function(record){ 
+			_debug && console.log( new Date(), "got result" );
+			if( record.length > 1 ) {
+				var state, node;
+				var rec = { [soul] : { [node_] : { [rel_]: soul, [state_] : {} } } };
+				node = rec[soul];
+				state = node[node_][state_];
+				record.forEach(function(record){ 
+					state[record.field] = parseFloat(record.state);
+					if( record.relation ) 
+						node[record.field] = {[rel_]:JSON.parse(record.relation)};
+					else if( record.value )
+						node[record.field] = JSON.parse(record.value);
+					else
+						node[record.field] = null;
+				} );
+				//console.log( new Date(), "Node is now ------------\n", JSON.stringify(rec) );
+				skip_put = at[SEQ_];
+				_debug && console.log( new Date(), "put to gun" );
+				gun.on('in', {ACK_: at[SEQ_], put: rec });
+				skip_put = null;
+			}
+			else record.forEach(function(record){ 
 				var msg;
 				if( record.relation )
-					msg = { [record.soul]: { [node_]:{ [rel_]:record.soul, [state_]:{[record.field]:record.state }}, [record.field]:{[rel_]:JSON.parse(record.relation)} } };
+					msg = { [soul]: { [node_]:{ [rel_]:record.soul, [state_]:{[record.field]:parseFloat(record.state) }}, [record.field]:{[rel_]:JSON.parse(record.relation)} } };
 				else if( record.value )
-					msg = { [record.soul]: { [node_]:{ [rel_]:record.soul, [state_]:{[record.field]:record.state }}, [record.field]:JSON.parse(record.value) } };
+					msg = { [soul]: { [node_]:{ [rel_]:record.soul, [state_]:{[record.field]:parseFloat(record.state) }}, [record.field]:JSON.parse(record.value) } };
 				else
-					msg = { [record.soul]: { [node_]:{ [rel_]:record.soul, [state_]:{[record.field]:record.state }}, [record.field]:null } };
-				_debug && console.log( new Date(), "  From Nodify", JSON.stringify(msg) );
+					msg = { [soul]: { [node_]:{ [rel_]:record.soul, [state_]:{[record.field]:parseFloat(record.state) }}, [record.field]:null } };
+				//console.log( "State is:", typeof( record.state ) );
+				//console.log( new Date(), "  From Nodify", JSON.stringify(msg) );
 				skip_put = at[SEQ_];
+				_debug && console.log( new Date(), "put to gun" );
 				result = gun.on('in', {[ACK_]: at[SEQ_], put: msg } );
 				skip_put = null;
 			});
+			_debug && console.log( new Date(), "put into gun done" );
 		}
 	});
 
 
 });
+
