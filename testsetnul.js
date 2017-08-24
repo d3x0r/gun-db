@@ -16,7 +16,8 @@ var gunDb = require( "." );
 
 //var Gun = require( "gun" );
 
-var gunNot = require('gun/lib/not')
+require('gun/lib/not')
+require( "gun-unset" );
 
 
 const rel_ = Gun.val.rel._;  // '#'
@@ -56,18 +57,14 @@ if( add ) {
 
 var deleting = false;
 var deleted = false;
+
+if( del )
+	alice.get( 'friends' ).unset( bob );
+
 alice.get( 'friends' ).map( ).val( function(val, field, ctx) { 
-		if( deleting ) { console.log( "skip new value during delete" ); return }
-		if( !val ) { console.log( "(val)Got empty value:", val ); return }
-		if( del && !deleted )
-			if( val.name == 'bob' ) {
-				console.log( "Removing bob from alice friend", field, val, ctx );
-				deleting = true;
-				deleted = true;
-				this.back(1).put( { [field]: null } );
-				deleting = false;
-				//alice.get( 'fiends' ).get( field ).put(null );
-			}
-		console.log( "(val)alice has a friend", val.name );
+		if( !val )
+			console.log( "(val)alice lost a friend." );
+		else
+			console.log( "(val)alice has a friend", val.name );
 } );
 

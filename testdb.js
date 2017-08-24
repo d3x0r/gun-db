@@ -5,7 +5,7 @@ var gunNot = require('gun/lib/not')
 var gunDb = require( "." );
 
 //var vfs = require( "sack.vfs" );
-//var vol = vfs.Volume( "Mount", "data.vfs"/*, "key1", "key2"*/ );
+//var vol = vfs.Volume( "Mount", "data.vfs" );
 //var gun = new Gun( { db:{ file:'$sack@Mount$gun.db' } } );
 
 var gun = new Gun( /*{ db:{ file:'gun.db' } }*/ );
@@ -54,7 +54,7 @@ root.map( (field,val)=>{
 	if( val == "hello" && !gotHello ) {
 		gotHello = true;
 		console.log( new Date(), "Got:", val, field ) 
-		for( var n = 0; n < 3000; n++ ) {
+		for( var n = 0; n < 30000; n++ ) {
 			if( (n % 1000) === 0 ) {
 				console.log( new Date(), "new items:", n , Date.now() - tick, (n-_n)/(Date.now() - tick) );
 				tick = Date.now();
