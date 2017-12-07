@@ -81,7 +81,7 @@ Gun.on('opt', function(ctx){
 				//console.log( "result?", record )
 				if(record && record.length && state <= record[0].state){ 
 					_debug && console.log( new Date(), "already newer in database.." ); 
-					gun.on('in', {[ACK_]: at[rel_], ok: 1});
+					ctx.on('in', {[ACK_]: at[rel_], ok: 1});
 					return 
 				}
 				if(value && (tmp = value[rel_])){ // TODO: Don't hardcode.
@@ -97,9 +97,9 @@ Gun.on('opt', function(ctx){
 				try {
 					_debug && console.log( new Date(), "Do replace field soul:", soul, " field:", field, "val:", dataValue );
 					client.do( `replace into record (soul,field,value,relation,state) values('${client.escape(soul)}','${client.escape(field)}',${dataValue},${dataRelation},${state})` );
-					gun.on('in', {[ACK_]: at[rel_], ok: 1});
+					ctx.on('in', {[ACK_]: at[rel_], ok: 1});
 				} catch( e ) {
-					gun.on('in', {[ACK_]: at[rel_], err: e});
+					ctx.on('in', {[ACK_]: at[rel_], err: e});
 				}
 			}
 		});
@@ -119,10 +119,10 @@ Gun.on('opt', function(ctx){
 			_debug && console.log( new Date(), "select result:", record );
 			if(!record || !record.length){
 				_debug && console.log( "So, result with an in?" );
-				return gun.on('in', {[ACK_]: at[SEQ_]});
+				return ctx.on('in', {[ACK_]: at[SEQ_]});
 			}
 			_debug && console.log( new Date(), "give back empty"  );
-			return gun.on('in', {[ACK_]: at[SEQ_], put: { [soul]: { [node_]:{ [rel_]:soul, [state_]:{}} }}});
+			return ctx.on('in', {[ACK_]: at[SEQ_], put: { [soul]: { [node_]:{ [rel_]:soul, [state_]:{}} }}});
 		}
 		if(field){
 			_debug && console.log( new Date(), " field...", field );
@@ -139,7 +139,7 @@ Gun.on('opt', function(ctx){
 					msg = { [rec.soul]: { [node_]:{ [rel_]:rec.soul, [state_]:{[rec.field]:rec.state }}, [rec.field]:null } };
 				skip_put = at[SEQ_];
 				console.log( new Date(), msg );
-				gun.on('in', {[ACK_]: at[SEQ_], put: msg});
+				ctx.on('in', {[ACK_]: at[SEQ_], put: msg});
 				skip_put = null;
 			}
 			return 
@@ -148,7 +148,7 @@ Gun.on('opt', function(ctx){
 		var record = client.do( `select * from record where soul='${client.escape(soul)}'` );
 		if( !record || !record.length){
 			_debug && console.log( new Date(), "nothing... So, result with an in?" );
-			gun.on('in', {[ACK_]: at[SEQ_]});	
+			ctx.on('in', {[ACK_]: at[SEQ_]});
 		}
 		else {
 			_debug && console.log( new Date(), "got result" );
@@ -169,7 +169,7 @@ Gun.on('opt', function(ctx){
 				//console.log( new Date(), "Node is now ------------\n", JSON.stringify(rec) );
 				skip_put = at[SEQ_];
 				_debug && console.log( new Date(), "put to gun" );
-				gun.on('in', {ACK_: at[SEQ_], put: rec });
+				ctx.on('in', {ACK_: at[SEQ_], put: rec });
 				skip_put = null;
 			}
 			else record.forEach(function(record){ 
@@ -184,7 +184,7 @@ Gun.on('opt', function(ctx){
 				//console.log( new Date(), "  From Nodify", JSON.stringify(msg) );
 				skip_put = at[SEQ_];
 				_debug && console.log( new Date(), "put to gun" );
-				result = gun.on('in', {[ACK_]: at[SEQ_], put: msg } );
+				result = ctx.on('in', {[ACK_]: at[SEQ_], put: msg } );
 				skip_put = null;
 			});
 			_debug && console.log( new Date(), "put into gun done" );

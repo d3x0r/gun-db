@@ -67,6 +67,7 @@ var gun = Gun({
 
 
 # Changelog
+- 1.0.568 Fix generating input to wrong object (should be ctx, not gun)
 - 1.0.567 update to gun 0.9.x
 - 1.0.566 for very large nodes, batch results into a single 'in' to gun.
 - 1.0.565 disable exclusive by default; add option to enable it
