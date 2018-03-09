@@ -1,6 +1,6 @@
 {
   "name": "gun-db",
-  "version": "1.0.568",
+  "version": "1.0.569",
   "description": "ODBC/Sqlite persistence layer for gun",
   "main": "index.js",
   "keywords": [
@@ -14,8 +14,8 @@
   "author": "d3x0r",
   "license": "MIT",
   "dependencies": {
-    "sack.vfs": "^0.1",
-    "gun": "^0.9.0"
+    "gun": "^0.9.98",
+    "sack.vfs": "^0"
   },
   "repository": {
     "type": "git",

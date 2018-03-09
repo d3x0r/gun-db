@@ -12,9 +12,10 @@ var _debug_tick = Date.now();
 const _debug = false;
 
 const rel_ = Gun.val.rel._;  // '#'
-const val_ = Gun._.field;  // '.'
+const val_ = Gun.obj.has._;  // '.'
 const node_ = Gun.node._;  // '_'
 const state_ = Gun.state._;// '>';
+const soul_ = Gun.node.soul._;// '#';
 
 const ACK_ = '@';
 const SEQ_ = '#';
@@ -69,7 +70,7 @@ Gun.on('opt', function(ctx){
 			}
 			return;
 		}
-		_debug && console.log( new Date(), "PUT", at["#"], at["@"], JSON.stringify( at.put ) );
+		_debug && console.log( new Date(), "PUT", at[SEQ_], at[ACK_], JSON.stringify( at.put ) );
 		Gun.graph.is(at.put, null, function(value, field, node, soul){ var id;
 			// kinda hate to always do a select just to see that the new update is newer than what was there.
 			//console.log( "do select soul field", field, `select state from Record where soul='${client.escape(soul)}' and field='${client.escape(field)}'` );
@@ -111,7 +112,7 @@ Gun.on('opt', function(ctx){
 		if(!client){ console.log( "Lost the database somehow" ); return }
 		var lex = at.get, u;
 		if(!lex){ return }
-		var soul = lex['#'];
+		var soul = lex[soul_];
 		var field = lex[val_];
 		_debug && console.log( new Date(), "doing get...for soul:", soul, "field:",field );
 		if(node_ === field){
