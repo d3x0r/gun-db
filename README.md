@@ -67,6 +67,7 @@ var gun = Gun({
 
 
 # Changelog
+- 1.0.570 Fix depending on gun in the future (98 it's only 96)
 - 1.0.569 Update to gun 0.9.98 (internal constant moved)
 - 1.0.568 Fix generating input to wrong object (should be ctx, not gun)
 - 1.0.567 update to gun 0.9.x
